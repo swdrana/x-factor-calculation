@@ -44,10 +44,15 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     // Add the current theme class
     root.classList.add(theme);
     
+    // Also update body classes for immediate visual feedback
+    document.body.classList.remove('light', 'dark');
+    document.body.classList.add(theme);
+    
     // Set color scheme for native elements
     root.style.colorScheme = theme;
     
     console.log('HTML classes after:', root.classList.toString());
+    console.log('Body classes after:', document.body.classList.toString());
     console.log('Color scheme set to:', theme);
   }, [theme, mounted]);
 

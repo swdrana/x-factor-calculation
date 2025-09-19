@@ -24,12 +24,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased h-full transition-colors duration-200`}
       >
         <ThemeProvider>
-          {children}
+          <div className="min-h-full bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+            {children}
+          </div>
         </ThemeProvider>
       </body>
     </html>
