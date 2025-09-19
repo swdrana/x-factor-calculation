@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import ServerForm from '@/components/ServerForm';
 import ServerList from '@/components/ServerList';
 import CurrencyRatesManager from '@/components/CurrencyRatesManager';
+import ThemeToggle from '@/components/ThemeToggle';
 import { IServer } from '@/models/Server';
 import { ICurrencyRate } from '@/models/CurrencyRate';
 
@@ -61,23 +62,28 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 dark:border-blue-400"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">X-Calculator</h1>
-          <p className="text-lg text-gray-600 mb-2">
-            Server Cost Analysis & X-Factor Calculator
-          </p>
-          <p className="text-sm text-gray-500">
-            {baseServerText}
-          </p>
+        <div className="flex justify-between items-center mb-8">
+          <div className="text-center flex-1">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">X-Calculator</h1>
+            <p className="text-lg text-gray-600 dark:text-gray-300 mb-2">
+              Server Cost Analysis & X-Factor Calculator
+            </p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              {baseServerText}
+            </p>
+          </div>
+          <div className="ml-4">
+            <ThemeToggle />
+          </div>
         </div>
 
         {/* Currency Rates Manager */}
@@ -111,7 +117,9 @@ export default function Home() {
         {/* Server List */}
         <ServerList 
           servers={servers} 
+          loading={loading}
           onServerDeleted={handleServerUpdate}
+          onServerUpdated={handleServerUpdate}
         />
       </div>
     </div>

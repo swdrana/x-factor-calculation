@@ -90,6 +90,36 @@ export function formatBDT(amount: number): string {
   return `৳${amount.toLocaleString('en-BD', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
+// Helper function to format USD currency
+export function formatUSD(amount: number): string {
+  return `$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+// Helper function to format RMB currency
+export function formatRMB(amount: number): string {
+  return `¥${amount.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+// Helper function to format currency with proper symbol
+export function formatCurrency(amount: number, currency: 'USD' | 'RMB' | 'BDT'): string {
+  switch (currency) {
+    case 'USD':
+      return formatUSD(amount);
+    case 'RMB':
+      return formatRMB(amount);
+    case 'BDT':
+      return formatBDT(amount);
+    default:
+      return `${amount.toFixed(2)}`;
+  }
+}
+
+// Helper function to convert BDT to USD
+export function convertBDTToUSD(bdtAmount: number, rates?: CurrencyRates): number {
+  const exchangeRates = rates || DEFAULT_EXCHANGE_RATES;
+  return bdtAmount / exchangeRates.USD;
+}
+
 // Helper function to format bandwidth
 export function formatBandwidth(tb: number): string {
   if (tb >= 1) {

@@ -13,7 +13,7 @@ interface ServerFormProps {
 export default function ServerForm({ onServerAdded, currencyRates, servers }: ServerFormProps) {
   const [formData, setFormData] = useState({
     name: '',
-    company: '',
+    websiteLink: '',
     originalPrice: '',
     originalCurrency: 'USD' as 'USD' | 'RMB' | 'BDT',
     duration: '',
@@ -81,7 +81,7 @@ export default function ServerForm({ onServerAdded, currencyRates, servers }: Se
         },
         body: JSON.stringify({
           name: formData.name,
-          company: formData.company,
+          websiteLink: formData.websiteLink || undefined,
           originalPrice: parseFloat(formData.originalPrice),
           originalCurrency: formData.originalCurrency,
           duration: parseInt(formData.duration),
@@ -93,7 +93,7 @@ export default function ServerForm({ onServerAdded, currencyRates, servers }: Se
       if (data.success) {
         setFormData({
           name: '',
-          company: '',
+          websiteLink: '',
           originalPrice: '',
           originalCurrency: 'USD',
           duration: '',
@@ -113,41 +113,40 @@ export default function ServerForm({ onServerAdded, currencyRates, servers }: Se
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Add New Server</h2>
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
+      <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Add New Server</h2>
       
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Server Name
           </label>
           <input
             type="text"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500 text-gray-900"
+            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 transition-colors duration-200"
             placeholder="Enter server name (e.g., DigitalOcean VPS)"
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Company Name
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Website Link (Optional)
           </label>
           <input
-            type="text"
-            value={formData.company}
-            onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500 text-gray-900"
-            placeholder="Enter company name (e.g., Satisfy Host)"
-            required
+            type="url"
+            value={formData.websiteLink}
+            onChange={(e) => setFormData({ ...formData, websiteLink: e.target.value })}
+            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 transition-colors duration-200"
+            placeholder="https://example.com (optional)"
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Original Price
             </label>
             <input
@@ -155,20 +154,21 @@ export default function ServerForm({ onServerAdded, currencyRates, servers }: Se
               step="0.01"
               value={formData.originalPrice}
               onChange={(e) => setFormData({ ...formData, originalPrice: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500 text-gray-900"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 transition-colors duration-200"
               placeholder="Enter price amount"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Currency
             </label>
             <select
               value={formData.originalCurrency}
               onChange={(e) => setFormData({ ...formData, originalCurrency: e.target.value as 'USD' | 'RMB' | 'BDT' })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 transition-colors duration-200"
+              required
             >
               <option value="USD">USD ($)</option>
               <option value="RMB">RMB (¥)</option>
@@ -177,58 +177,58 @@ export default function ServerForm({ onServerAdded, currencyRates, servers }: Se
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Duration (months)
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Duration (M)
             </label>
             <input
               type="number"
+              min="1"
               value={formData.duration}
               onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500 text-gray-900"
-              placeholder="Enter duration in months"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 transition-colors duration-200"
+              placeholder="e.g., 12"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Bandwidth (TB/month)
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Bandwidth (TB)
             </label>
             <input
               type="number"
               step="0.1"
+              min="0.1"
               value={formData.bandwidth}
               onChange={(e) => setFormData({ ...formData, bandwidth: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500 text-gray-900"
-              placeholder="Enter bandwidth in TB"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 transition-colors duration-200"
+              placeholder="e.g., 1.5"
               required
             />
           </div>
         </div>
 
         {preview && (
-          <div className="bg-gray-50 rounded-lg p-4 mt-4">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Preview Calculations</h3>
+          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+            <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">Preview</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
               <div>
-                <span className="text-gray-600">Price in BDT:</span>
-                <div className="font-semibold">৳{preview.priceInBDT.toFixed(2)}</div>
+                <span className="text-gray-600 dark:text-gray-400">Monthly Cost:</span>
+                <div className="font-semibold text-gray-900 dark:text-gray-100">৳{preview.monthlyCostBDT.toFixed(2)}</div>
               </div>
               <div>
-                <span className="text-gray-600">Monthly Cost:</span>
-                <div className="font-semibold">৳{preview.monthlyCostBDT.toFixed(2)}</div>
+                <span className="text-gray-600 dark:text-gray-400">Cost per TB:</span>
+                <div className="font-semibold text-gray-900 dark:text-gray-100">৳{preview.costPerTB.toFixed(2)}</div>
               </div>
               <div>
-                <span className="text-gray-600">Cost per TB:</span>
-                <div className="font-semibold">৳{preview.costPerTB.toFixed(2)}</div>
+                <span className="text-gray-600 dark:text-gray-400">Cost per GB:</span>
+                <div className="font-semibold text-gray-900 dark:text-gray-100">৳{preview.costPerGB.toFixed(2)}</div>
               </div>
               <div>
-                <span className="text-gray-600">X-Factor:</span>
-                <div className={`font-semibold ${preview.xFactor > 1 ? 'text-red-600' : 'text-green-600'}`}>
-                  {preview.xFactor.toFixed(2)}x
-                </div>
+                <span className="text-gray-600 dark:text-gray-400">X-Factor:</span>
+                <div className="font-semibold text-blue-600 dark:text-blue-400">{preview.xFactor.toFixed(2)}x</div>
               </div>
             </div>
           </div>
@@ -237,13 +237,11 @@ export default function ServerForm({ onServerAdded, currencyRates, servers }: Se
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+          className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
         >
           {loading ? 'Adding Server...' : 'Add Server'}
         </button>
       </form>
-
-
     </div>
   );
 }

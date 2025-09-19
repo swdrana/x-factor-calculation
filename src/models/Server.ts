@@ -2,7 +2,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IServer extends Document {
   name: string;
-  company: string; // New field for company name
+  websiteLink?: string; // Optional website link
   originalPrice: number;
   originalCurrency: 'USD' | 'RMB' | 'BDT';
   duration: number; // in months
@@ -23,9 +23,9 @@ const ServerSchema = new Schema<IServer>({
     required: true,
     trim: true,
   },
-  company: {
+  websiteLink: {
     type: String,
-    required: true,
+    required: false,
     trim: true,
   },
   originalPrice: {
