@@ -24,7 +24,7 @@ export default function ServerList({ servers, loading, onServerDeleted, onServer
     originalCurrency: 'USD',
     duration: 1,
     bandwidth: 0,
-    websiteUrl: ''
+    websiteLink: ''
   });
   const [isSaving, setIsSaving] = useState(false);
 
@@ -50,7 +50,7 @@ export default function ServerList({ servers, loading, onServerDeleted, onServer
       originalCurrency: server.originalCurrency,
       duration: server.duration,
       bandwidth: server.bandwidth,
-      websiteUrl: server.websiteUrl || ''
+      websiteLink: server.websiteLink || ''
     });
   };
 
@@ -62,7 +62,7 @@ export default function ServerList({ servers, loading, onServerDeleted, onServer
       originalCurrency: 'USD',
       duration: 1,
       bandwidth: 0,
-      websiteUrl: ''
+      websiteLink: ''
     });
   };
 
@@ -87,7 +87,7 @@ export default function ServerList({ servers, loading, onServerDeleted, onServer
           originalCurrency: 'USD',
           duration: 1,
           bandwidth: 0,
-          websiteUrl: ''
+          websiteLink: ''
         });
         onServerUpdated(); // Use onServerUpdated instead of onServerDeleted
       }
@@ -183,9 +183,10 @@ export default function ServerList({ servers, loading, onServerDeleted, onServer
   });
 
   const totalCost = servers.reduce((sum, server) => sum + server.monthlyCostBDT, 0);
-  const totalBandwidth = servers.reduce((sum, server) => sum + server.bandwidthGB, 0);
+  const totalBandwidth = servers.reduce((sum, server) => sum + server.bandwidth, 0);
   const avgXFactor = servers.length > 0 ? servers.reduce((sum, server) => sum + server.xFactor, 0) / servers.length : 0;
   const bestCostPerGB = servers.length > 0 ? Math.min(...servers.map(s => s.costPerGB)) : 0;
+  const avgMonthlyCost = servers.length > 0 ? totalCost / servers.length : 0;
 
   if (loading) {
     return (
@@ -277,12 +278,25 @@ export default function ServerList({ servers, loading, onServerDeleted, onServer
                     />
                   ) : (
                     <div>
-                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{server.name}</div>
-                      {server.isBaseServer && (
-                        <span className="mt-1 inline-block px-2 py-1 text-xs font-semibold text-green-800 dark:text-green-200 bg-green-100 dark:bg-green-800 rounded-full">
-                          Base Server
-                        </span>
-                      )}
+                      <div className="flex items-center gap-2">
+                        {server.websiteLink ? (
+                          <a 
+                            href={server.websiteLink} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline cursor-pointer"
+                          >
+                            {server.name}
+                          </a>
+                        ) : (
+                          <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{server.name}</div>
+                        )}
+                        {server.isBaseServer && (
+                          <span className="mt-1 inline-block px-2 py-1 text-xs font-semibold text-green-800 dark:text-green-200 bg-green-100 dark:bg-green-800 rounded-full">
+                            Base Server
+                          </span>
+                        )}
+                      </div>
                     </div>
                   )}
                 </td>
@@ -347,8 +361,8 @@ export default function ServerList({ servers, loading, onServerDeleted, onServer
                         <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Website URL</label>
                         <input
                           type="url"
-                          value={editForm.websiteUrl}
-                          onChange={(e) => setEditForm({ ...editForm, websiteUrl: e.target.value })}
+                          value={editForm.websiteLink}
+                          onChange={(e) => setEditForm({ ...editForm, websiteLink: e.target.value })}
                           className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                           placeholder="https://example.com"
                         />
@@ -371,10 +385,10 @@ export default function ServerList({ servers, loading, onServerDeleted, onServer
                         {formatUSD(convertBDTToUSD(server.monthlyCostBDT))} ≈ {formatBDT(server.monthlyCostBDT)} / M
                       </div>
                       
-                      {server.websiteUrl && (
+                      {server.websiteLink && (
                         <div className="mt-1">
                           <a 
-                            href={server.websiteUrl} 
+                            href={server.websiteLink} 
                             target="_blank" 
                             rel="noopener noreferrer"
                             className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-xs underline"
@@ -494,11 +508,11 @@ export default function ServerList({ servers, loading, onServerDeleted, onServer
               <div className="text-sm text-gray-600 dark:text-gray-400">Total Bandwidth</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">{formatBDT(bestCostPerGB * 1000)}</div>
+              <div className="text-2xl font-bold text-green-600 dark:text-green-400">{formatBDT(bestCostPerGB)}</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">Best Cost/GB</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">{formatBDT(totalCost)}</div>
+              <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{formatBDT(avgMonthlyCost)}</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">Avg Monthly Cost</div>
             </div>
           </div>
