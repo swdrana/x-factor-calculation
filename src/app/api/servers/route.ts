@@ -63,10 +63,10 @@ export async function POST(request: NextRequest) {
     await connectDB();
     
     const body = await request.json();
-    const { name, company, originalPrice, originalCurrency, duration, bandwidth } = body;
+    const { name, websiteLink, originalPrice, originalCurrency, duration, bandwidth } = body;
 
-    // Validate required fields
-    if (!name || !company || !originalPrice || !originalCurrency || !duration || !bandwidth) {
+    // Validate required fields (websiteLink is optional)
+    if (!name || !originalPrice || !originalCurrency || !duration || !bandwidth) {
       return NextResponse.json(
         { success: false, error: 'All fields are required' },
         { status: 400 }
@@ -113,7 +113,7 @@ export async function POST(request: NextRequest) {
     // Create new server with calculations
     const server = new Server({
       name,
-      company,
+      websiteLink,
       originalPrice,
       originalCurrency,
       duration,
